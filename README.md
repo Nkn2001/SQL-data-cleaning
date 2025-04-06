@@ -46,4 +46,29 @@ SELECT * FROM club_member_info ;
 UPDATE club_member_info_cleaned SET full_name = TRIM(full_name);
 UPDATE club_member_info_cleaned SET full_name = UPPER(full_name);
 ```
+#### Noted 
+In the full_name column, there are values with spaces in the names and inconsistent character formatting. Therefore, the Trim function was used to remove the spaces, and the UPPER function was used to format all values in the full_name column in uppercase.
+### Column age 
+```
+UPDATE club_member_info_cleaned SET age = SUBSTR(age, 1, 2);
+UPDATE club_member_info_cleaned 
+SET age = (
+    SELECT AVG(CAST(age AS REAL))
+    FROM club_member_info_cleaned 
+    WHERE age != '' AND age IS NOT NULL
+)
+WHERE age = '';
+```
+#### Noted
+In the age column, there are numbers with values much larger than the actual age. Therefore, the substr function was used to extract the first two digits from the left.
+In the age column, there are 3 empty cells. Therefore, the AVG function was used to replace these 3 empty values.
+### Column martial_status
+```SQL
+UPDATE club_member_info_cleaned SET martial_status = 'UNKNOWN' where martial_status = ''; 
+```
+#### Noted 
+In the marital_status column, there are 20 empty cells. Therefore, I have filled those cells with the string 'UNKNOWN'.
+
+
+
 
